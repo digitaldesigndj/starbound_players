@@ -1,3 +1,4 @@
+// Reads the log once and writes files
 fs = require('fs');
 
 Array.prototype.remove = function() {
@@ -19,6 +20,7 @@ function update_players_list() {
 	
 	lines = data.toString().split("\n");
 	
+	players = [];
 	players_on = [];
 	
 	for ( i = 0; i < lines.length - 1; ++i ) {
@@ -37,6 +39,7 @@ function update_players_list() {
 				// console.log( lines[i] );
 				// console.log( get_user( lines[i] ) );
 				players_on.push( get_user( lines[i] ) );
+				players.push( get_user( lines[i] ) );
 			}
 			if( msg[msg.length-1] === 'disconnected' ) {
 				// console.log( lines[i] );
@@ -51,6 +54,14 @@ function update_players_list() {
 			console.log(err);
 		} else {
 			console.log("JSON players file saved");
+		}
+	});
+	
+	fs.writeFile( '/var/www/boundstar.com/public_html/players_list.json', JSON.stringify( players , null, 4 ), function( err ) {
+		if(err) {
+			console.log(err);
+		} else {
+			console.log("JSON players list file saved");
 		}
 	}); 
 }
